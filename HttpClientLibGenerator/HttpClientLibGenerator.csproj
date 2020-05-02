@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Sdk Name="CodeGeneration.Roslyn.PluginMetapackage.Sdk" Version="0.7.63" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../HttpClientLibGenerator.Attributes/HttpClientLibGenerator.Attributes.csproj" />
+    <NupkgAdditionalDependency Include="HttpClientLibGenerator.Generators" IncludeAssets="all" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CodeGeneration.Roslyn.Tool" Version="0.7.63">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <ProjectReference Include="..\HttpClientLibGenerator.Generators\HttpClientLibGenerator.Generators.csproj"
+                      ReferenceOutputAssembly="false"
+                      SkipGetTargetFrameworkProperties="true"
+                      OutputItemType="CodeGenerationRoslynPlugin" />
+    <PackageReference Include="CodeGeneration.Roslyn.Attributes"
+                      Version="0.7.63" />
+    <PackageReference Include="CodeGeneration.Roslyn.Tool"
+                     Version="0.7.63"
+                     PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HttpClientLibGenerator.Attributes\HttpClientLibGenerator.Attributes.csproj" />
+    <ProjectReference Include="..\HttpClientLibGenerator.Generators\HttpClientLibGenerator.Generators.csproj" />
+  </ItemGroup>
+
+</Project>
