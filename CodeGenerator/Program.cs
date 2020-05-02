@@ -9,8 +9,9 @@ namespace CodeGenerator
 
     [HttpClientLibAttribute("test")]
     interface IUsersClient 
-    { 
-    
+    {
+        [RequestMapping("/api/items")]
+        string Get();
     }
 
     class Program
@@ -18,13 +19,7 @@ namespace CodeGenerator
         static void Main(string[] args)
         {
             Console.WriteLine("hello world !");
-            GenerateHttpClient();
             Console.ReadKey();
-        }
-
-        private static void GenerateHttpClient()
-        {
-            
         }
     }
 }
