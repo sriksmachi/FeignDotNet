@@ -1,8 +1,5 @@
 ﻿using HttpClientLibGenerator;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using System;
-using System.Runtime.InteropServices;
 
 namespace CodeGenerator
 {
@@ -19,6 +16,12 @@ namespace CodeGenerator
         static void Main(string[] args)
         {
             Console.WriteLine("hello world !");
+
+            //TODO : Resolve using DI
+            var usersClient = new UsersClient();
+
+            var data = usersClient.Get();
+            
             Console.ReadKey();
         }
     }

@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HttpClientLibGenerator.Generators
 {
-    public class HttpClientLibGenerator : ICodeGenerator
+    public class HttpClientLibGenerator : IRichCodeGenerator
     {
         private readonly string suffix;
 
@@ -39,16 +39,22 @@ namespace HttpClientLibGenerator.Generators
         /// The generated member syntax to be added to the project.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public Task<SyntaxList<MemberDeclarationSyntax>> GenerateAsync(TransformationContext context,
+        public Task<RichGenerationResult> GenerateRichAsync(TransformationContext context,
             IProgress<Diagnostic> progress,
             CancellationToken cancellationToken)
         {
+
+            var syntaxFactory = SyntaxFactory.CompilationUnit();
+
+            syntaxFactory = AddUsings(syntaxFactory);
+
             var applyToInterface = (InterfaceDeclarationSyntax)context.ProcessingNode;
 
             var classDeclaration = SyntaxFactory.ClassDeclaration(SyntaxFactory
                 .Identifier(applyToInterface.Identifier.ValueText.Remove(0,1)));
 
-            classDeclaration = classDeclaration.AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
+            classDeclaration = classDeclaration.AddModifiers(SyntaxFactory
+                .Token(SyntaxKind.PublicKeyword));
 
             var interfaceMembers = applyToInterface.Members;
 
@@ -57,10 +63,26 @@ namespace HttpClientLibGenerator.Generators
                 classDeclaration = AddImplementation(member, classDeclaration);
             }
 
-            SyntaxList<MemberDeclarationSyntax> results = SyntaxFactory
-               .SingletonList<MemberDeclarationSyntax>(classDeclaration);
+            syntaxFactory = syntaxFactory.AddMembers(classDeclaration);
 
-            return Task.FromResult(results);
+            var richGenerationResult = new RichGenerationResult();
+
+            richGenerationResult.Members = syntaxFactory.Members;
+
+            richGenerationResult.Usings = syntaxFactory.Usings;
+
+            return Task.FromResult(richGenerationResult);
+        }
+
+        /// <summary>
+        /// Adds the usings.
+        /// </summary>
+        /// <param name="syntaxFactory">The syntax factory.</param>
+        /// <returns></returns>
+        private CompilationUnitSyntax AddUsings(CompilationUnitSyntax syntaxFactory)
+        {
+            syntaxFactory = syntaxFactory.AddUsings(SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("Microsoft.Extensions.Http")));
+            return syntaxFactory;
         }
 
         /// <summary>
@@ -86,6 +108,20 @@ namespace HttpClientLibGenerator.Generators
             classDeclaration = classDeclaration.AddMembers(methodDeclaration);
 
             return classDeclaration;
+        }
+
+        /// <summary>
+        /// Create the syntax tree representing the expansion of some member to which this attribute is applied.
+        /// </summary>
+        /// <param name="context">All the inputs necessary to perform the code generation.</param>
+        /// <param name="progress">A way to report diagnostic messages.</param>
+        /// <param name="cancellationToken">A cancellation token.</param>
+        /// <returns>
+        /// The generated member syntax to be added to the project.
+        /// </returns>
+        public Task<SyntaxList<MemberDeclarationSyntax>> GenerateAsync(TransformationContext context, IProgress<Diagnostic> progress, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }
