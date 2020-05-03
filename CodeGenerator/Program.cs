@@ -1,5 +1,6 @@
 ﻿using HttpClientLibGenerator;
 using System;
+using System.Threading.Tasks;
 
 namespace CodeGenerator
 {
@@ -8,19 +9,19 @@ namespace CodeGenerator
     interface IUsersClient 
     {
         [RequestMapping("/api/items")]
-        string Get();
+        Task<string> GetAsync();
     }
 
     class Program
     {
-        static void Main(string[] args)
+        async static Task Main(string[] args)
         {
             Console.WriteLine("hello world !");
 
             //TODO : Resolve using DI
             var usersClient = new UsersClient();
 
-            var data = usersClient.Get();
+            var data = await usersClient.GetAsync();
             
             Console.ReadKey();
         }
